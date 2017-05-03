@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<title>BlackOut</title>
+</head>
+
+<style>
+p{display: inline;}
+</style>
+
+<body>
+
+<pre>Grid    Voltage: <p id="gridvoltage"></p> V</pre>
+<pre>Output  Voltage: <p id="outputvoltage"></p> V</pre>
+<pre>Battery Voltage: <p id="batteryvoltage"></p> V</pre>
+
+<script>
+var public_key = 'XArZ3m47L8HYa3mOgyAM';
+ $.ajax({
+   url: 'http://data.sparkfun.com/output/' + public_key + '.json',
+   jsonp: 'callback',
+   cache: true,
+   dataType: 'jsonp',
+   data: {
+     page: 1
+   },
+   success: function(response) {
+     console.log(response);
+     listToPopulate = ['gridvoltage', 'outputvoltage', 'batteryvoltage']
+      listToPopulate.forEach(function(element) {
+         console.log(element);
+         document.getElementById(element).innerHTML = response[0][element];
+      });
+   }
+ });
+</script> 
+
+</body>
+</html>
