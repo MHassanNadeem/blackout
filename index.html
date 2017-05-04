@@ -4,6 +4,7 @@
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <title>BlackOut</title>
+<meta http-equiv="refresh" content="15">
 </head>
 
 <style>
@@ -11,10 +12,18 @@ p{display: inline;}
 </style>
 
 <body>
-
-<pre>Grid    Voltage: <p id="gridvoltage"></p> V</pre>
-<pre>Output  Voltage: <p id="outputvoltage"></p> V</pre>
-<pre>Battery Voltage: <p id="batteryvoltage"></p> V</pre>
+<pre>Update Time: <p id="time">---</p></pre>
+<hr>
+<pre>Output  Source: <p id="mode">---</p></pre>
+<pre>Output Voltage: <p id="outputvoltage">---</p> V</pre>
+<pre>Grid   Voltage: <p id="gridvoltage">---</p> V</pre>
+<pre>Power   (Load): <p id="outputpowerapparent">---</p> W</pre>
+<hr>
+<pre>Battery  Voltage: <p id="batteryvoltage">---</p> V</pre>
+<pre>Battery Capacity: <p id="battery_capacity">---</p> %</pre>
+<hr>
+<pre>Solar Voltage: <p id="solar_voltage">---</p> V</pre>
+<pre>Solar Current: <p id="solar_current">---</p> A</pre>
 
 <script>
 var public_key = 'XArZ3m47L8HYa3mOgyAM';
@@ -24,13 +33,12 @@ var public_key = 'XArZ3m47L8HYa3mOgyAM';
    cache: true,
    dataType: 'jsonp',
    data: {
-     page: 1
+     limit: 1
    },
    success: function(response) {
      console.log(response);
-     listToPopulate = ['gridvoltage', 'outputvoltage', 'batteryvoltage']
+     listToPopulate = ['time', 'gridvoltage', 'outputvoltage', 'batteryvoltage', 'mode', 'battery_capacity', 'outputpowerapparent', 'solar_voltage', 'solar_current']
       listToPopulate.forEach(function(element) {
-         console.log(element);
          document.getElementById(element).innerHTML = response[0][element];
       });
    }
