@@ -4,7 +4,7 @@
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <title>BlackOut</title>
-<meta http-equiv="refresh" content="15">
+<!-- <meta http-equiv="refresh" content="15"> -->
 </head>
 
 <style>
@@ -13,6 +13,7 @@ p{display: inline;}
 
 <body>
 <pre>Update Time: <p id="time">---</p></pre>
+<pre>Updated    : <p id="dataLife">---</p>s ago</pre>
 <hr>
 <pre>Output  Source: <p id="mode">---</p></pre>
 <pre>Output Voltage: <p id="outputvoltage">---</p> V</pre>
@@ -26,7 +27,27 @@ p{display: inline;}
 <pre>Solar Current: <p id="solar_current">---</p> A</pre>
 
 <script>
+
+setInterval(function () {
+   dataLifeUpdater();
+    }, 1*1000);
+    
+function dataLifeUpdater(){
+   var lastUpdateDate = new Date(Date.parse( document.getElementById('time').innerHTML ));
+   var nowDate = new Date();
+   var timeDiff = (nowDate - lastUpdateDate)/1000;
+   
+   document.getElementById('dataLife').innerHTML = timeDiff.toFixed(0);
+}
+
+setInterval(function () {
+   updateData();
+    }, 15*1000);
+
+
 var public_key = 'XArZ3m47L8HYa3mOgyAM';
+
+function updateData(){
  $.ajax({
    url: 'http://data.sparkfun.com/output/' + public_key + '.json',
    jsonp: 'callback',
@@ -41,8 +62,15 @@ var public_key = 'XArZ3m47L8HYa3mOgyAM';
       listToPopulate.forEach(function(element) {
          document.getElementById(element).innerHTML = response[0][element];
       });
+   },
+   
+   error: function(){
+      <!-- $.ajax(this); -->
    }
- });
+ });  
+}
+
+updateData();
 </script> 
 
 </body>
