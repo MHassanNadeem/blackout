@@ -12,8 +12,8 @@ p{display: inline;}
 </style>
 
 <body>
-<pre>Update Time: <p id="time">---</p></pre>
-<pre>Updated    : <p id="dataLife">---</p>s ago</pre>
+<pre>Update  Time: <p id="time">---</p></pre>
+<pre>Last Updated: <p id="dataLife">---</p>s ago</pre>
 <hr>
 <pre>Output  Source: <p id="mode">---</p></pre>
 <pre>Output Voltage: <p id="outputvoltage">---</p> V</pre>
@@ -28,21 +28,22 @@ p{display: inline;}
 
 <script>
 
-setInterval(function () {
-   dataLifeUpdater();
-    }, 1*1000);
-    
+
 function dataLifeUpdater(){
    var lastUpdateDate = new Date(Date.parse( document.getElementById('time').innerHTML ));
    var nowDate = new Date();
    var timeDiff = (nowDate - lastUpdateDate)/1000;
    
    document.getElementById('dataLife').innerHTML = timeDiff.toFixed(0);
+   
+   setTimeout(function() {
+      dataLifeUpdater();  /* Repeat */
+   }, 1*1000)
 }
 
 setInterval(function () {
    updateData();
-    }, 15*1000);
+   }, 15*1000);
 
 
 var public_key = 'XArZ3m47L8HYa3mOgyAM';
@@ -71,6 +72,7 @@ function updateData(){
 }
 
 updateData();
+dataLifeUpdater();
 </script> 
 
 </body>
