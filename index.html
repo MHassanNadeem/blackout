@@ -22,9 +22,11 @@ p{display: inline;}
 <hr>
 <pre>Battery  Voltage: <p id="batteryvoltage">---</p> V</pre>
 <pre>Battery Capacity: <p id="battery_capacity">---</p> %</pre>
+<pre>Battery Charging: <p id="battery_charging">---</p></pre>
 <hr>
 <pre>Solar Voltage: <p id="solar_voltage">---</p> V</pre>
 <pre>Solar Current: <p id="solar_current">---</p> A</pre>
+<pre>Solar  Power: <p id="solar_power">---</p> W</pre>
 
 <script>
 
@@ -40,11 +42,6 @@ function dataLifeUpdater(){
       dataLifeUpdater();  /* Repeat */
    }, 1*1000)
 }
-
-setInterval(function () {
-   updateData();
-   }, 15*1000);
-
 
 var public_key = 'XArZ3m47L8HYa3mOgyAM';
 
@@ -63,12 +60,31 @@ function updateData(){
       listToPopulate.forEach(function(element) {
          document.getElementById(element).innerHTML = response[0][element];
       });
+      
+      document.getElementById('solar_power').innerHTML = parseInt(response[0]['batteryvoltage']) * parseInt(response[0]['solar_current']);
+      
+      var status = response[0]['status'];
+      var battery_charging = 'NA';
+      if(status.charAt(status.length-3) == '1'){
+         if(status.charAt(status.length-1) == '1'){
+            battery_charging = 'Grid Charging';
+         }else{
+            battery_charging = 'Solar Charging';
+         }
+      }else{
+         battery_charging = 'Not Charging';
+      }
+      document.getElementById('battery_charging').innerHTML = battery_charging;
    },
    
    error: function(){
       <!-- $.ajax(this); -->
    }
- });  
+ });
+ 
+   setTimeout(function() {
+      updateData();  /* Repeat */
+   }, 15*1000)
 }
 
 updateData();
