@@ -21,14 +21,13 @@ p{display: inline;}
 <pre>Power   (Load): <p id="outputpowerapparent">---</p> W</pre>
 <hr>
 <pre>Battery  Voltage: <p id="batteryvoltage">---</p> V</pre>
+<pre>Charging Current: <p id="batterycurrent">---</p> A</pre>
 <pre>Battery Capacity: <p id="battery_capacity">---</p> %</pre>
 <pre>Battery Charging: <p id="battery_charging">---</p></pre>
 <hr>
 <pre>Solar Voltage: <p id="solar_voltage">---</p> V</pre>
 <pre>Solar Current: <p id="solar_current">---</p> A</pre>
 <pre>Solar  Power: <p id="solar_power">---</p> W</pre>
-<pre>Solar Power2: <p id="solar_power2">---</p> W</pre>
-<pre>Solar Power3: <p id="solar_power3">---</p> W</pre>
 
 <script>
 
@@ -58,16 +57,20 @@ function updateData(){
    },
    success: function(response) {
      console.log(response);
-     listToPopulate = ['time', 'gridvoltage', 'outputvoltage', 'batteryvoltage', 'mode', 'battery_capacity', 'outputpowerapparent', 'solar_voltage', 'solar_current']
+     listToPopulate = ['time', 'gridvoltage', 'outputvoltage', 'batteryvoltage', 'batterycurrent', 'mode', 'battery_capacity', 'outputpowerapparent', 'solar_voltage', 'solar_current']
       listToPopulate.forEach(function(element) {
          document.getElementById(element).innerHTML = response[0][element];
       });
       
       document.getElementById('solar_power').innerHTML = parseInt(response[0]['batteryvoltage']) * parseInt(response[0]['solar_current']);
-      document.getElementById('solar_power2').innerHTML = parseInt(response[0]['battery_voltage_scc']) * parseInt(response[0]['solar_current']);
-      var v1 = parseInt(response[0]['batteryvoltage']);
-      var v2 = parseInt(response[0]['battery_voltage_scc']);
-      document.getElementById('solar_power3').innerHTML = (v1+v2)/2 * parseInt(response[0]['solar_current']);
+      
+      var mode = response[0]['mode'];
+      if(mode === 'B' ){
+        mode = "Battery/Solar";
+      }else{
+        mode = "Grid";
+      }
+      document.getElementById('mode').innerHTML = mode;
       
       var status = response[0]['status'];
       var battery_charging = 'NA';
